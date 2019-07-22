@@ -27,13 +27,13 @@
 
 package org.apache.hc.core5.net;
 
+import org.apache.hc.core5.util.Args;
+
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.regex.Pattern;
-
-import org.apache.hc.core5.util.Args;
 
 /**
  * A collection of utilities relating to InetAddresses.
@@ -47,24 +47,24 @@ public class InetAddressUtils {
 
     private static final String IPV4_BASIC_PATTERN_STRING =
             "(([1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){1}" + // initial first field, 1-255
-            "(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){2}" + // following 2 fields, 0-255 followed by .
-             "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])"; // final field, 0-255
+                    "(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){2}" + // following 2 fields, 0-255 followed by .
+                    "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])"; // final field, 0-255
 
     private static final Pattern IPV4_PATTERN =
-        Pattern.compile("^" + IPV4_BASIC_PATTERN_STRING + "$");
+            Pattern.compile("^" + IPV4_BASIC_PATTERN_STRING + "$");
 
     private static final Pattern IPV4_MAPPED_IPV6_PATTERN = // TODO does not allow for redundant leading zeros
             Pattern.compile("^::[fF]{4}:" + IPV4_BASIC_PATTERN_STRING + "$");
 
     private static final Pattern IPV6_STD_PATTERN =
-        Pattern.compile(
-                "^[0-9a-fA-F]{1,4}(:[0-9a-fA-F]{1,4}){7}$");
+            Pattern.compile(
+                    "^[0-9a-fA-F]{1,4}(:[0-9a-fA-F]{1,4}){7}$");
 
     private static final Pattern IPV6_HEX_COMPRESSED_PATTERN =
-        Pattern.compile(
-                "^(([0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){0,5})?)" + // 0-6 hex fields
-                 "::" +
-                 "(([0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){0,5})?)$"); // 0-6 hex fields
+            Pattern.compile(
+                    "^(([0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){0,5})?)" + // 0-6 hex fields
+                            "::" +
+                            "(([0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{1,4}){0,5})?)$"); // 0-6 hex fields
 
     /*
      *  The above pattern is not totally rigorous as it allows for more than 7 hex fields in total
@@ -106,12 +106,12 @@ public class InetAddressUtils {
      */
     public static boolean isIPv6HexCompressedAddress(final String input) {
         int colonCount = 0;
-        for(int i = 0; i < input.length(); i++) {
+        for (int i = 0; i < input.length(); i++) {
             if (input.charAt(i) == COLON_CHAR) {
                 colonCount++;
             }
         }
-        return  colonCount <= MAX_COLON_COUNT && IPV6_HEX_COMPRESSED_PATTERN.matcher(input).matches();
+        return colonCount <= MAX_COLON_COUNT && IPV6_HEX_COMPRESSED_PATTERN.matcher(input).matches();
     }
 
     /**

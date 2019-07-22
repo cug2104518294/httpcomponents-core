@@ -1,38 +1,4 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.http.message;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
 
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.MessageHeaders;
@@ -40,8 +6,12 @@ import org.apache.hc.core5.http.ProtocolException;
 import org.apache.hc.core5.util.CharArrayBuffer;
 import org.apache.hc.core5.util.LangUtils;
 
+import java.io.Serializable;
+import java.util.*;
+
 /**
- * A class for combining a set of headers. This class allows for multiple headers with the same name
+ * A class for combining a set of headers.
+ * This class allows for multiple headers with the same name
  * and keeps track of the order in which headers were added.
  *
  * @since 4.0
@@ -50,9 +20,11 @@ public class HeaderGroup implements MessageHeaders, Serializable {
 
     private static final long serialVersionUID = 2608834160639271617L;
 
-    private static final Header[] EMPTY = new Header[] {};
+    private static final Header[] EMPTY = new Header[]{};
 
-    /** The list of headers for this group, in the order in which they were added */
+    /**
+     * The list of headers for this group, in the order in which they were added
+     */
     private final List<Header> headers;
 
     /**
@@ -112,7 +84,6 @@ public class HeaderGroup implements MessageHeaders, Serializable {
      *
      * @param header the header to remove
      * @return <code>true</code> if any header was removed as a result of this call.
-     *
      * @since 5.0
      */
     public boolean removeHeaders(final Header header) {
@@ -120,7 +91,7 @@ public class HeaderGroup implements MessageHeaders, Serializable {
             return false;
         }
         boolean removed = false;
-        for (final Iterator<Header> iterator = headerIterator(); iterator.hasNext();) {
+        for (final Iterator<Header> iterator = headerIterator(); iterator.hasNext(); ) {
             final Header current = iterator.next();
             if (headerEquals(header, current)) {
                 iterator.remove();
@@ -135,8 +106,7 @@ public class HeaderGroup implements MessageHeaders, Serializable {
      * the same name is found the given header is added to the end of the list.
      *
      * @param header the new header that should replace the first header with the same
-     * name if present in the list.
-     *
+     *               name if present in the list.
      * @since 5.0
      */
     public void setHeader(final Header header) {
@@ -205,7 +175,6 @@ public class HeaderGroup implements MessageHeaders, Serializable {
      * <p>Header name comparison is case insensitive.
      *
      * @param name the name of the header(s) to get
-     *
      * @return an array of length &ge; 0
      */
     @Override
@@ -343,7 +312,6 @@ public class HeaderGroup implements MessageHeaders, Serializable {
      * Returns an iterator over this group of headers.
      *
      * @return iterator over this group of headers.
-     *
      * @since 5.0
      */
     @Override
@@ -354,11 +322,9 @@ public class HeaderGroup implements MessageHeaders, Serializable {
     /**
      * Returns an iterator over the headers with a given name in this group.
      *
-     * @param name      the name of the headers over which to iterate, or
-     *                  {@code null} for all headers
-     *
+     * @param name the name of the headers over which to iterate, or
+     *             {@code null} for all headers
      * @return iterator over some headers in this group.
-     *
      * @since 5.0
      */
     @Override
@@ -369,9 +335,8 @@ public class HeaderGroup implements MessageHeaders, Serializable {
     /**
      * Removes all headers with a given name in this group.
      *
-     * @param name      the name of the headers to be removed.
+     * @param name the name of the headers to be removed.
      * @return <code>true</code> if any header was removed as a result of this call.
-     *
      * @since 5.0
      */
     public boolean removeHeaders(final String name) {

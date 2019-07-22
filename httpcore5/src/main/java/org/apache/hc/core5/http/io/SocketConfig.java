@@ -1,40 +1,13 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.http.io;
-
-import java.net.SocketAddress;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.hc.core5.annotation.Contract;
 import org.apache.hc.core5.annotation.ThreadingBehavior;
 import org.apache.hc.core5.util.Args;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
+
+import java.net.SocketAddress;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Classic I/O network socket configuration.
@@ -183,6 +156,7 @@ public class SocketConfig {
      * <p>
      * Default: {@code 0} (system default)
      * </p>
+     *
      * @return the maximum queue length for incoming connection indications
      * @since 4.4
      */
@@ -220,15 +194,15 @@ public class SocketConfig {
     public static SocketConfig.Builder copy(final SocketConfig config) {
         Args.notNull(config, "Socket config");
         return new Builder()
-            .setSoTimeout(config.getSoTimeout())
-            .setSoReuseAddress(config.isSoReuseAddress())
-            .setSoLinger(config.getSoLinger())
-            .setSoKeepAlive(config.isSoKeepAlive())
-            .setTcpNoDelay(config.isTcpNoDelay())
-            .setSndBufSize(config.getSndBufSize())
-            .setRcvBufSize(config.getRcvBufSize())
-            .setBacklogSize(config.getBacklogSize())
-            .setSocksProxyAddress(config.getSocksProxyAddress());
+                .setSoTimeout(config.getSoTimeout())
+                .setSoReuseAddress(config.isSoReuseAddress())
+                .setSoLinger(config.getSoLinger())
+                .setSoKeepAlive(config.isSoKeepAlive())
+                .setTcpNoDelay(config.isTcpNoDelay())
+                .setSndBufSize(config.getSndBufSize())
+                .setRcvBufSize(config.getRcvBufSize())
+                .setBacklogSize(config.getBacklogSize())
+                .setSocksProxyAddress(config.getSocksProxyAddress());
     }
 
     public static class Builder {
