@@ -22,8 +22,10 @@ import org.apache.hc.core5.http.ProtocolVersion;
  */
 public interface HttpContext {
 
-    /** The prefix reserved for use by HTTP components. "http." */
-    public static final String RESERVED_PREFIX  = "http.";
+    /**
+     * The prefix reserved for use by HTTP components. "http."
+     */
+    public static final String RESERVED_PREFIX = "http.";
 
     /**
      * Returns protocol version used in this context.
@@ -50,10 +52,10 @@ public interface HttpContext {
     /**
      * Sets value of the attribute with the given name.
      *
-     * @param id the attribute name.
+     * @param id  the attribute name.
      * @param obj the attribute value.
      * @return the previous value associated with <code>id</code>, or
-     *         {@code null} if there was no mapping for <code>id</code>.
+     * {@code null} if there was no mapping for <code>id</code>.
      */
     Object setAttribute(String id, Object obj);
 

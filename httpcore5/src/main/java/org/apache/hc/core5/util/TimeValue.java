@@ -1,39 +1,12 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.util;
+
+import org.apache.hc.core5.annotation.Contract;
+import org.apache.hc.core5.annotation.ThreadingBehavior;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.hc.core5.annotation.Contract;
-import org.apache.hc.core5.annotation.ThreadingBehavior;
 
 /**
  * Represents a time value as a {@code long} time and a {@link TimeUnit}.
@@ -89,7 +62,7 @@ public class TimeValue {
      * Returns the given {@code timeValue} if it is not {@code null}, if {@code null} then returns the given
      * {@code defaultValue}.
      *
-     * @param timeValue may be {@code null}
+     * @param timeValue    may be {@code null}
      * @param defaultValue may be {@code null}
      * @return {@code timeValue} or {@code defaultValue}
      */
@@ -189,7 +162,6 @@ public class TimeValue {
      * <li></li>
      * </ul>
      *
-     *
      * @param value the TimeValue to parse
      * @return a new TimeValue
      * @throws ParseException if the number cannot be parsed
@@ -235,11 +207,9 @@ public class TimeValue {
     /**
      * Returns a TimeValue whose value is {@code (this / divisor)}.
      *
-     * @param divisor
-     *            value by which this TimeValue is to be divided.
+     * @param divisor value by which this TimeValue is to be divided.
      * @return {@code this / divisor}
-     * @throws ArithmeticException
-     *             if {@code divisor} is zero.
+     * @throws ArithmeticException if {@code divisor} is zero.
      */
     public TimeValue divide(final long divisor) {
         final long newDuration = duration / divisor;
@@ -249,13 +219,10 @@ public class TimeValue {
     /**
      * Returns a TimeValue whose value is {@code (this / divisor)}.
      *
-     * @param divisor
-     *            value by which this TimeValue is to be divided.
-     * @param targetTimeUnit
-     *            the target TimeUnit
+     * @param divisor        value by which this TimeValue is to be divided.
+     * @param targetTimeUnit the target TimeUnit
      * @return {@code this / divisor}
-     * @throws ArithmeticException
-     *             if {@code divisor} is zero.
+     * @throws ArithmeticException if {@code divisor} is zero.
      */
     public TimeValue divide(final long divisor, final TimeUnit targetTimeUnit) {
         return of(convert(targetTimeUnit) / divisor, targetTimeUnit);
@@ -297,29 +264,28 @@ public class TimeValue {
     /**
      * Returns a made up scale for TimeUnits.
      *
-     * @param tUnit
-     *            a TimeUnit
+     * @param tUnit a TimeUnit
      * @return a number from 1 to 7, where 1 is NANOSECONDS and 7 DAYS.
      */
     private int scale(final TimeUnit tUnit) {
         switch (tUnit) {
-        case NANOSECONDS:
-            return 1;
-        case MICROSECONDS:
-            return 2;
-        case MILLISECONDS:
-            return 3;
-        case SECONDS:
-            return 4;
-        case MINUTES:
-            return 5;
-        case HOURS:
-            return 6;
-        case DAYS:
-            return 7;
-        default:
-            // Should never happens unless Java adds to the enum.
-            throw new IllegalStateException();
+            case NANOSECONDS:
+                return 1;
+            case MICROSECONDS:
+                return 2;
+            case MILLISECONDS:
+                return 3;
+            case SECONDS:
+                return 4;
+            case MINUTES:
+                return 5;
+            case HOURS:
+                return 6;
+            case DAYS:
+                return 7;
+            default:
+                // Should never happens unless Java adds to the enum.
+                throw new IllegalStateException();
         }
     }
 

@@ -1,49 +1,8 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.http.impl.io;
-
-import java.io.IOException;
 
 import org.apache.hc.core5.annotation.Contract;
 import org.apache.hc.core5.annotation.ThreadingBehavior;
-import org.apache.hc.core5.http.ClassicHttpRequest;
-import org.apache.hc.core5.http.ClassicHttpResponse;
-import org.apache.hc.core5.http.ConnectionReuseStrategy;
-import org.apache.hc.core5.http.Header;
-import org.apache.hc.core5.http.HeaderElements;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.HttpException;
-import org.apache.hc.core5.http.HttpHeaders;
-import org.apache.hc.core5.http.HttpStatus;
-import org.apache.hc.core5.http.HttpVersion;
-import org.apache.hc.core5.http.ProtocolException;
-import org.apache.hc.core5.http.ProtocolVersion;
-import org.apache.hc.core5.http.UnsupportedHttpVersionException;
+import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.impl.DefaultConnectionReuseStrategy;
 import org.apache.hc.core5.http.impl.Http1StreamListener;
 import org.apache.hc.core5.http.io.HttpClientConnection;
@@ -55,6 +14,8 @@ import org.apache.hc.core5.http.protocol.HttpCoreContext;
 import org.apache.hc.core5.http.protocol.HttpProcessor;
 import org.apache.hc.core5.io.Closer;
 import org.apache.hc.core5.util.Args;
+
+import java.io.IOException;
 
 /**
  * {@code HttpRequestExecutor} is a client side HTTP protocol handler based
@@ -71,9 +32,7 @@ import org.apache.hc.core5.util.Args;
  */
 @Contract(threading = ThreadingBehavior.IMMUTABLE)
 public class HttpRequestExecutor {
-
     public static final int DEFAULT_WAIT_FOR_CONTINUE = 3000;
-
     private final int waitForContinue;
     private final ConnectionReuseStrategy connReuseStrategy;
     private final Http1StreamListener streamListener;
@@ -104,16 +63,15 @@ public class HttpRequestExecutor {
     /**
      * Sends the request and obtain a response.
      *
-     * @param request   the request to execute.
-     * @param conn      the connection over which to execute the request.
-     * @param informationCallback   callback to execute upon receipt of information status (1xx).
-     *                              May be null.
-     * @param context the context
-     * @return  the response to the request.
-     *
-     * @throws IOException in case of an I/O error.
+     * @param request             the request to execute.
+     * @param conn                the connection over which to execute the request.
+     * @param informationCallback callback to execute upon receipt of information status (1xx).
+     *                            May be null.
+     * @param context             the context
+     * @return the response to the request.
+     * @throws IOException   in case of an I/O error.
      * @throws HttpException in case of HTTP protocol violation or a processing
-     *   problem.
+     *                       problem.
      */
     public ClassicHttpResponse execute(
             final ClassicHttpRequest request,
@@ -133,7 +91,6 @@ public class HttpRequestExecutor {
                 }
                 context.setProtocolVersion(transportVersion);
             }
-
             conn.sendRequestHeader(request);
             if (streamListener != null) {
                 streamListener.onRequestHead(conn, request);
@@ -167,7 +124,7 @@ public class HttpRequestExecutor {
                             }
                             response = null;
                             continue;
-                        } else if (status >= HttpStatus.SC_CLIENT_ERROR){
+                        } else if (status >= HttpStatus.SC_CLIENT_ERROR) {
                             conn.terminateRequest(request);
                         } else {
                             conn.sendRequestEntity(request);
@@ -198,7 +155,6 @@ public class HttpRequestExecutor {
                 conn.receiveResponseEntity(response);
             }
             return response;
-
         } catch (final HttpException | IOException | RuntimeException ex) {
             Closer.closeQuietly(conn);
             throw ex;
@@ -208,14 +164,13 @@ public class HttpRequestExecutor {
     /**
      * Sends the request and obtain a response.
      *
-     * @param request   the request to execute.
-     * @param conn      the connection over which to execute the request.
+     * @param request the request to execute.
+     * @param conn    the connection over which to execute the request.
      * @param context the context
-     * @return  the response to the request.
-     *
-     * @throws IOException in case of an I/O error.
+     * @return the response to the request.
+     * @throws IOException   in case of an I/O error.
      * @throws HttpException in case of HTTP protocol violation or a processing
-     *   problem.
+     *                       problem.
      */
     public ClassicHttpResponse execute(
             final ClassicHttpRequest request,
@@ -231,10 +186,9 @@ public class HttpRequestExecutor {
      * @param request   the request to prepare
      * @param processor the processor to use
      * @param context   the context for sending the request
-     *
-     * @throws IOException in case of an I/O error.
+     * @throws IOException   in case of an I/O error.
      * @throws HttpException in case of HTTP protocol violation or a processing
-     *   problem.
+     *                       problem.
      */
     public void preProcess(
             final ClassicHttpRequest request,
@@ -259,10 +213,9 @@ public class HttpRequestExecutor {
      * @param response  the response object to post-process
      * @param processor the processor to use
      * @param context   the context for post-processing the response
-     *
-     * @throws IOException in case of an I/O error.
+     * @throws IOException   in case of an I/O error.
      * @throws HttpException in case of HTTP protocol violation or a processing
-     *   problem.
+     *                       problem.
      */
     public void postProcess(
             final ClassicHttpResponse response,
@@ -282,10 +235,10 @@ public class HttpRequestExecutor {
     /**
      * Determines whether the connection can be kept alive and is safe to be re-used for subsequent message exchanges.
      *
-     * @param request current request object.
-     * @param response  current response object.
+     * @param request    current request object.
+     * @param response   current response object.
      * @param connection actual connection.
-     * @param context current context.
+     * @param context    current context.
      * @return {@code true} is the connection can be kept-alive and re-used.
      * @throws IOException in case of an I/O error.
      */

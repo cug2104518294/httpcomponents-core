@@ -27,23 +27,15 @@
 
 package org.apache.hc.core5.http.impl;
 
-import java.util.Iterator;
-
 import org.apache.hc.core5.annotation.Contract;
 import org.apache.hc.core5.annotation.ThreadingBehavior;
-import org.apache.hc.core5.http.ConnectionReuseStrategy;
-import org.apache.hc.core5.http.Header;
-import org.apache.hc.core5.http.HeaderElements;
-import org.apache.hc.core5.http.HttpHeaders;
-import org.apache.hc.core5.http.HttpRequest;
-import org.apache.hc.core5.http.HttpResponse;
-import org.apache.hc.core5.http.HttpStatus;
-import org.apache.hc.core5.http.HttpVersion;
-import org.apache.hc.core5.http.ProtocolVersion;
+import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.message.BasicTokenIterator;
 import org.apache.hc.core5.http.message.MessageSupport;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.apache.hc.core5.util.Args;
+
+import java.util.Iterator;
 
 /**
  * Default implementation of a strategy deciding about connection re-use. The strategy
@@ -51,11 +43,11 @@ import org.apache.hc.core5.util.Args;
  * version and {@code Connection} header field if present. Connections will not be
  * re-used and will close if any of these conditions is met
  * <ul>
- *     <li>the {@code close} connection option is present in the request message</li>
- *     <li>the response message content body is incorrectly or ambiguously delineated</li>
- *     <li>the {@code close} connection option is present in the response message</li>
- *     <li>If the received protocol is {@code HTTP/1.0} (or earlier) and {@code keep-alive}
- *     connection option is not present</li>
+ * <li>the {@code close} connection option is present in the request message</li>
+ * <li>the response message content body is incorrectly or ambiguously delineated</li>
+ * <li>the {@code close} connection option is present in the response message</li>
+ * <li>If the received protocol is {@code HTTP/1.0} (or earlier) and {@code keep-alive}
+ * connection option is not present</li>
  * </ul>
  * In the absence of a {@code Connection} header field, the non-standard but commonly used
  * {@code Proxy-Connection} header field will be used instead. If no connection options are
@@ -79,7 +71,6 @@ public class DefaultConnectionReuseStrategy implements ConnectionReuseStrategy {
     public boolean keepAlive(
             final HttpRequest request, final HttpResponse response, final HttpContext context) {
         Args.notNull(response, "HTTP response");
-
         if (request != null) {
             final Iterator<String> ti = new BasicTokenIterator(request.headerIterator(HttpHeaders.CONNECTION));
             while (ti.hasNext()) {
