@@ -10,6 +10,8 @@ import org.apache.hc.core5.http.HttpResponse;
 /**
  * HTTP/1.1 stream event listener.
  *
+ * 流事件监听
+ *
  * @since 5.0
  */
 @Contract(threading = ThreadingBehavior.STATELESS)

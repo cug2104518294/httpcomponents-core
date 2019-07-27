@@ -1,38 +1,4 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.http.impl.io;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CoderResult;
 
 import org.apache.hc.core5.http.Chars;
 import org.apache.hc.core5.http.MessageConstraintException;
@@ -42,6 +8,13 @@ import org.apache.hc.core5.http.io.SessionInputBuffer;
 import org.apache.hc.core5.util.Args;
 import org.apache.hc.core5.util.ByteArrayBuffer;
 import org.apache.hc.core5.util.CharArrayBuffer;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CoderResult;
 
 /**
  * Abstract base class for session input buffers that stream data from
@@ -70,16 +43,16 @@ public class SessionInputBufferImpl implements SessionInputBuffer {
     /**
      * Creates new instance of SessionInputBufferImpl.
      *
-     * @param metrics HTTP transport metrics.
-     * @param bufferSize buffer size. Must be a positive number.
+     * @param metrics       HTTP transport metrics.
+     * @param bufferSize    buffer size. Must be a positive number.
      * @param minChunkLimit size limit below which data chunks should be buffered in memory
-     *   in order to minimize native method invocations on the underlying network socket.
-     *   The optimal value of this parameter can be platform specific and defines a trade-off
-     *   between performance of memory copy operations and that of native method invocation.
-     *   If negative default chunk limited will be used.
-     * @param maxLineLen maximum line length.
-     * @param charDecoder charDecoder to be used for decoding HTTP protocol elements.
-     *   If {@code null} simple type cast will be used for byte to char conversion.
+     *                      in order to minimize native method invocations on the underlying network socket.
+     *                      The optimal value of this parameter can be platform specific and defines a trade-off
+     *                      between performance of memory copy operations and that of native method invocation.
+     *                      If negative default chunk limited will be used.
+     * @param maxLineLen    maximum line length.
+     * @param charDecoder   charDecoder to be used for decoding HTTP protocol elements.
+     *                      If {@code null} simple type cast will be used for byte to char conversion.
      */
     public SessionInputBufferImpl(
             final BasicHttpTransportMetrics metrics,
@@ -230,11 +203,11 @@ public class SessionInputBufferImpl implements SessionInputBuffer {
      * This method treats a lone LF as a valid line delimiters in addition
      * to CR-LF required by the HTTP specification.
      *
-     * @param     charBuffer   the line buffer, one line of characters upon return
-     * @return     the total number of bytes read into the buffer, or
-     *             {@code -1} is there is no more data because the end of
-     *             the stream has been reached.
-     * @throws  IOException  if an I/O error occurs.
+     * @param charBuffer the line buffer, one line of characters upon return
+     * @return the total number of bytes read into the buffer, or
+     * {@code -1} is there is no more data because the end of
+     * the stream has been reached.
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public int readLine(final CharArrayBuffer charBuffer, final InputStream inputStream) throws IOException {
@@ -301,7 +274,7 @@ public class SessionInputBufferImpl implements SessionInputBuffer {
      * to CR-LF required by the HTTP specification.
      *
      * @return HTTP line as a string
-     * @throws  IOException  if an I/O error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     private int lineFromLineBuffer(final CharArrayBuffer charBuffer)
             throws IOException {
@@ -319,7 +292,7 @@ public class SessionInputBufferImpl implements SessionInputBuffer {
         if (this.decoder == null) {
             charBuffer.append(this.lineBuffer, 0, len);
         } else {
-            final ByteBuffer bbuf =  ByteBuffer.wrap(this.lineBuffer.array(), 0, len);
+            final ByteBuffer bbuf = ByteBuffer.wrap(this.lineBuffer.array(), 0, len);
             len = appendDecoded(charBuffer, bbuf);
         }
         this.lineBuffer.clear();
@@ -340,7 +313,7 @@ public class SessionInputBufferImpl implements SessionInputBuffer {
         if (this.decoder == null) {
             charbuffer.append(this.buffer, off, len);
         } else {
-            final ByteBuffer bbuf =  ByteBuffer.wrap(this.buffer, off, len);
+            final ByteBuffer bbuf = ByteBuffer.wrap(this.buffer, off, len);
             len = appendDecoded(charbuffer, bbuf);
         }
         return len;

@@ -6,5 +6,4 @@ package org.apache.hc.core5.http;
  * @since 5.0
  */
 public interface ClassicHttpRequest extends HttpRequest, HttpEntityContainer {
-    // empty
 }

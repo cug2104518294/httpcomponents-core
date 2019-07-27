@@ -11,6 +11,8 @@ public interface Header extends NameValuePair {
      * <p>
      * Some encoding schemes such as HPACK impose restrictions on encoded
      * representation of sensitive headers.
+     * <p>
+     * 某些编码方案（如HPACK）对敏感标头的编码表示施加了限制。
      * </p>
      *
      * @return {@code true} if the header should be considered sensitive.

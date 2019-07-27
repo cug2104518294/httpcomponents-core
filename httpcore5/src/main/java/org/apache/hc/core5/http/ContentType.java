@@ -1,43 +1,4 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.http;
-
-import java.io.Serializable;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.charset.UnsupportedCharsetException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import org.apache.hc.core5.annotation.Contract;
 import org.apache.hc.core5.annotation.ThreadingBehavior;
@@ -48,6 +9,12 @@ import org.apache.hc.core5.http.message.ParserCursor;
 import org.apache.hc.core5.util.Args;
 import org.apache.hc.core5.util.CharArrayBuffer;
 import org.apache.hc.core5.util.TextUtils;
+
+import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnsupportedCharsetException;
+import java.util.*;
 
 /**
  * Content type information consisting of a MIME type and an optional charset.
@@ -80,13 +47,13 @@ public final class ContentType implements Serializable {
             "application/xml", StandardCharsets.ISO_8859_1);
     public static final ContentType IMAGE_BMP = create(
             "image/bmp");
-    public static final ContentType IMAGE_GIF= create(
+    public static final ContentType IMAGE_GIF = create(
             "image/gif");
     public static final ContentType IMAGE_JPEG = create(
             "image/jpeg");
     public static final ContentType IMAGE_PNG = create(
             "image/png");
-    public static final ContentType IMAGE_SVG= create(
+    public static final ContentType IMAGE_SVG = create(
             "image/svg+xml");
     public static final ContentType IMAGE_TIFF = create(
             "image/tiff");
@@ -105,28 +72,29 @@ public final class ContentType implements Serializable {
 
 
     private static final Map<String, ContentType> CONTENT_TYPE_MAP;
+
     static {
 
         final ContentType[] contentTypes = {
-            APPLICATION_ATOM_XML,
-            APPLICATION_FORM_URLENCODED,
-            APPLICATION_JSON,
-            APPLICATION_SVG_XML,
-            APPLICATION_XHTML_XML,
-            APPLICATION_XML,
-            IMAGE_BMP,
-            IMAGE_GIF,
-            IMAGE_JPEG,
-            IMAGE_PNG,
-            IMAGE_SVG,
-            IMAGE_TIFF,
-            IMAGE_WEBP,
-            MULTIPART_FORM_DATA,
-            TEXT_HTML,
-            TEXT_PLAIN,
-            TEXT_XML };
+                APPLICATION_ATOM_XML,
+                APPLICATION_FORM_URLENCODED,
+                APPLICATION_JSON,
+                APPLICATION_SVG_XML,
+                APPLICATION_XHTML_XML,
+                APPLICATION_XML,
+                IMAGE_BMP,
+                IMAGE_GIF,
+                IMAGE_JPEG,
+                IMAGE_PNG,
+                IMAGE_SVG,
+                IMAGE_TIFF,
+                IMAGE_WEBP,
+                MULTIPART_FORM_DATA,
+                TEXT_HTML,
+                TEXT_PLAIN,
+                TEXT_XML};
         final HashMap<String, ContentType> map = new HashMap<>();
-        for (final ContentType contentType: contentTypes) {
+        for (final ContentType contentType : contentTypes) {
             map.put(contentType.getMimeType(), contentType);
         }
         CONTENT_TYPE_MAP = Collections.unmodifiableMap(map);
@@ -173,7 +141,7 @@ public final class ContentType implements Serializable {
         if (this.params == null) {
             return null;
         }
-        for (final NameValuePair param: this.params) {
+        for (final NameValuePair param : this.params) {
             if (param.getName().equalsIgnoreCase(name)) {
                 return param.getValue();
             }
@@ -213,8 +181,8 @@ public final class ContentType implements Serializable {
      * Creates a new instance of {@link ContentType}.
      *
      * @param mimeType MIME type. It may not be {@code null} or empty. It may not contain
-     *        characters {@code <">, <;>, <,>} reserved by the HTTP specification.
-     * @param charset charset.
+     *                 characters {@code <">, <;>, <,>} reserved by the HTTP specification.
+     * @param charset  charset.
      * @return content type
      */
     public static ContentType create(final String mimeType, final Charset charset) {
@@ -227,7 +195,7 @@ public final class ContentType implements Serializable {
      * Creates a new instance of {@link ContentType} without a charset.
      *
      * @param mimeType MIME type. It may not be {@code null} or empty. It may not contain
-     *        characters {@code <">, <;>, <,>} reserved by the HTTP specification.
+     *                 characters {@code <">, <;>, <,>} reserved by the HTTP specification.
      * @return content type
      */
     public static ContentType create(final String mimeType) {
@@ -238,12 +206,12 @@ public final class ContentType implements Serializable {
      * Creates a new instance of {@link ContentType}.
      *
      * @param mimeType MIME type. It may not be {@code null} or empty. It may not contain
-     *        characters {@code <">, <;>, <,>} reserved by the HTTP specification.
-     * @param charset charset. It may not contain characters {@code <">, <;>, <,>} reserved by the HTTP
-     *        specification. This parameter is optional.
+     *                 characters {@code <">, <;>, <,>} reserved by the HTTP specification.
+     * @param charset  charset. It may not contain characters {@code <">, <;>, <,>} reserved by the HTTP
+     *                 specification. This parameter is optional.
      * @return content type
      * @throws UnsupportedCharsetException Thrown when the named charset is not available in
-     * this instance of the Java virtual machine
+     *                                     this instance of the Java virtual machine
      */
     public static ContentType create(
             final String mimeType, final String charset) throws UnsupportedCharsetException {
@@ -284,10 +252,9 @@ public final class ContentType implements Serializable {
      * Creates a new instance of {@link ContentType} with the given parameters.
      *
      * @param mimeType MIME type. It may not be {@code null} or empty. It may not contain
-     *        characters {@code <">, <;>, <,>} reserved by the HTTP specification.
-     * @param params parameters.
+     *                 characters {@code <">, <;>, <,>} reserved by the HTTP specification.
+     * @param params   parameters.
      * @return content type
-     *
      * @since 4.4
      */
     public static ContentType create(
@@ -304,7 +271,7 @@ public final class ContentType implements Serializable {
      * @return content type
      * {@code Content-Type} value.
      * @throws UnsupportedCharsetException Thrown when the named charset is not available in
-     * this instance of the Java virtual machine
+     *                                     this instance of the Java virtual machine
      */
     public static ContentType parse(final CharSequence s) throws UnsupportedCharsetException {
         return parse(s, true);
@@ -317,7 +284,7 @@ public final class ContentType implements Serializable {
      * @return content type
      * {@code Content-Type} value.
      * @throws UnsupportedCharsetException Thrown when the named charset is not available in
-     * this instance of the Java virtual machine
+     *                                     this instance of the Java virtual machine
      */
     public static ContentType parseLenient(final CharSequence s) throws UnsupportedCharsetException {
         return parse(s, false);
@@ -340,7 +307,6 @@ public final class ContentType implements Serializable {
      *
      * @param mimeType MIME type
      * @return content type or {@code null} if not known.
-     *
      * @since 4.5
      */
     public static ContentType getByMimeType(final String mimeType) {
@@ -367,7 +333,7 @@ public final class ContentType implements Serializable {
      * @param charset name
      * @return a new instance with this MIME type and the given Charset name.
      * @throws UnsupportedCharsetException Thrown when the named charset is not available in
-     * this instance of the Java virtual machine
+     *                                     this instance of the Java virtual machine
      * @since 4.3
      */
     public ContentType withCharset(final String charset) {
@@ -388,18 +354,18 @@ public final class ContentType implements Serializable {
         }
         final Map<String, String> paramMap = new LinkedHashMap<>();
         if (this.params != null) {
-            for (final NameValuePair param: this.params) {
+            for (final NameValuePair param : this.params) {
                 paramMap.put(param.getName(), param.getValue());
             }
         }
-        for (final NameValuePair param: params) {
+        for (final NameValuePair param : params) {
             paramMap.put(param.getName(), param.getValue());
         }
         final List<NameValuePair> newParams = new ArrayList<>(paramMap.size() + 1);
         if (this.charset != null && !paramMap.containsKey("charset")) {
             newParams.add(new BasicNameValuePair("charset", this.charset.name()));
         }
-        for (final Map.Entry<String, String> entry: paramMap.entrySet()) {
+        for (final Map.Entry<String, String> entry : paramMap.entrySet()) {
             newParams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
         }
         return create(this.getMimeType(), newParams.toArray(new NameValuePair[newParams.size()]), true);

@@ -1,12 +1,12 @@
 package org.apache.hc.core5.http.config;
 
-import java.nio.charset.Charset;
-import java.nio.charset.CodingErrorAction;
-import java.nio.charset.StandardCharsets;
-
 import org.apache.hc.core5.annotation.Contract;
 import org.apache.hc.core5.annotation.ThreadingBehavior;
 import org.apache.hc.core5.util.Args;
+
+import java.nio.charset.Charset;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 
 /**
  * HTTP/1.1 char coding configuration.
@@ -61,9 +61,9 @@ public class CharCodingConfig {
     public static CharCodingConfig.Builder copy(final CharCodingConfig config) {
         Args.notNull(config, "Config");
         return new Builder()
-            .setCharset(config.getCharset())
-            .setMalformedInputAction(config.getMalformedInputAction())
-            .setUnmappableInputAction(config.getUnmappableInputAction());
+                .setCharset(config.getCharset())
+                .setMalformedInputAction(config.getMalformedInputAction())
+                .setUnmappableInputAction(config.getUnmappableInputAction());
     }
 
     public static class Builder {

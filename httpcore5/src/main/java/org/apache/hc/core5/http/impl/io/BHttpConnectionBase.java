@@ -1,29 +1,7 @@
 package org.apache.hc.core5.http.impl.io;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocket;
-
 import org.apache.hc.core5.function.Supplier;
-import org.apache.hc.core5.http.ConnectionClosedException;
-import org.apache.hc.core5.http.ContentLengthStrategy;
-import org.apache.hc.core5.http.EndpointDetails;
-import org.apache.hc.core5.http.Header;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.HttpHeaders;
-import org.apache.hc.core5.http.HttpMessage;
-import org.apache.hc.core5.http.ProtocolVersion;
+import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.config.Http1Config;
 import org.apache.hc.core5.http.impl.BasicEndpointDetails;
 import org.apache.hc.core5.http.impl.BasicHttpConnectionMetrics;
@@ -37,6 +15,20 @@ import org.apache.hc.core5.net.InetAddressUtils;
 import org.apache.hc.core5.util.Args;
 import org.apache.hc.core5.util.Timeout;
 
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 class BHttpConnectionBase implements BHttpConnection {
 
     final Http1Config http1Config;
@@ -44,7 +36,6 @@ class BHttpConnectionBase implements BHttpConnection {
     final SessionOutputBufferImpl outbuffer;
     final BasicHttpConnectionMetrics connMetrics;
     final AtomicReference<SocketHolder> socketHolderRef;
-
     volatile ProtocolVersion version;
     volatile EndpointDetails endpointDetails;
 
@@ -305,8 +296,7 @@ class BHttpConnectionBase implements BHttpConnection {
         if (endpointDetails == null) {
             final SocketHolder socketHolder = this.socketHolderRef.get();
             if (socketHolder != null) {
-                @SuppressWarnings("resource")
-                final Socket socket = socketHolder.getSocket();
+                @SuppressWarnings("resource") final Socket socket = socketHolder.getSocket();
                 Timeout socketTimeout;
                 try {
                     socketTimeout = Timeout.ofMilliseconds(socket.getSoTimeout());

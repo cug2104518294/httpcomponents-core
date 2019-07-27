@@ -1,38 +1,4 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.http.impl.io;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.CharsetEncoder;
-import java.nio.charset.CoderResult;
 
 import org.apache.hc.core5.http.Chars;
 import org.apache.hc.core5.http.impl.BasicHttpTransportMetrics;
@@ -41,6 +7,13 @@ import org.apache.hc.core5.http.io.SessionOutputBuffer;
 import org.apache.hc.core5.util.Args;
 import org.apache.hc.core5.util.ByteArrayBuffer;
 import org.apache.hc.core5.util.CharArrayBuffer;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CoderResult;
 
 /**
  * Abstract base class for session output buffers that stream data to
@@ -54,7 +27,7 @@ import org.apache.hc.core5.util.CharArrayBuffer;
  */
 public class SessionOutputBufferImpl implements SessionOutputBuffer {
 
-    private static final byte[] CRLF = new byte[] {Chars.CR, Chars.LF};
+    private static final byte[] CRLF = new byte[]{Chars.CR, Chars.LF};
 
     private final BasicHttpTransportMetrics metrics;
     private final ByteArrayBuffer buffer;
@@ -66,13 +39,13 @@ public class SessionOutputBufferImpl implements SessionOutputBuffer {
     /**
      * Creates new instance of SessionOutputBufferImpl.
      *
-     * @param metrics HTTP transport metrics.
-     * @param bufferSize buffer size. Must be a positive number.
+     * @param metrics           HTTP transport metrics.
+     * @param bufferSize        buffer size. Must be a positive number.
      * @param fragementSizeHint fragment size hint defining a minimal size of a fragment
-     *   that should be written out directly to the socket bypassing the session buffer.
-     *   Value {@code 0} disables fragment buffering.
-     * @param charEncoder charEncoder to be used for encoding HTTP protocol elements.
-     *   If {@code null} simple type cast will be used for char to byte conversion.
+     *                          that should be written out directly to the socket bypassing the session buffer.
+     *                          Value {@code 0} disables fragment buffering.
+     * @param charEncoder       charEncoder to be used for encoding HTTP protocol elements.
+     *                          If {@code null} simple type cast will be used for char to byte conversion.
      */
     public SessionOutputBufferImpl(
             final BasicHttpTransportMetrics metrics,
@@ -182,8 +155,8 @@ public class SessionOutputBufferImpl implements SessionOutputBuffer {
      * <p>
      * This method uses CR-LF as a line delimiter.
      *
-     * @param      charbuffer the buffer containing chars of the line.
-     * @throws  IOException  if an I/O error occurs.
+     * @param charbuffer the buffer containing chars of the line.
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void writeLine(final CharArrayBuffer charbuffer, final OutputStream outputStream) throws IOException {

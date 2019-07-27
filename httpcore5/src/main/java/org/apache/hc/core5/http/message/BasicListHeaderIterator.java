@@ -1,42 +1,17 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.http.message;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.util.Args;
 import org.apache.hc.core5.util.Asserts;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 /**
  * {@link java.util.Iterator} of {@link org.apache.hc.core5.http.Header}s. For use by {@link HeaderGroup}.
+ * <p>
+ * httpclient用于遍历对应键值对的iterator
  *
  * @since 4.0
  */
@@ -69,9 +44,9 @@ class BasicListHeaderIterator implements Iterator<Header> {
     /**
      * Creates a new header iterator.
      *
-     * @param headers   a list of headers over which to iterate
-     * @param name      the name of the headers over which to iterate, or
-     *                  {@code null} for any
+     * @param headers a list of headers over which to iterate
+     * @param name    the name of the headers over which to iterate, or
+     *                {@code null} for any
      */
     public BasicListHeaderIterator(final List<Header> headers, final String name) {
         super();
@@ -84,19 +59,17 @@ class BasicListHeaderIterator implements Iterator<Header> {
     /**
      * Determines the index of the next header.
      *
-     * @param pos       one less than the index to consider first,
-     *                  -1 to search for the first header
-     *
-     * @return  the index of the next header that matches the filter name,
-     *          or negative if there are no more headers
+     * @param pos one less than the index to consider first,
+     *            -1 to search for the first header
+     * @return the index of the next header that matches the filter name,
+     * or negative if there are no more headers
      */
     protected int findNext(final int pos) {
         int from = pos;
         if (from < -1) {
             return -1;
         }
-
-        final int to = this.allHeaders.size()-1;
+        final int to = this.allHeaders.size() - 1;
         boolean found = false;
         while (!found && (from < to)) {
             from++;
@@ -108,19 +81,16 @@ class BasicListHeaderIterator implements Iterator<Header> {
     /**
      * Checks whether a header is part of the iteration.
      *
-     * @param index     the index of the header to check
-     *
-     * @return  {@code true} if the header should be part of the
-     *          iteration, {@code false} to skip
+     * @param index the index of the header to check
+     * @return {@code true} if the header should be part of the
+     * iteration, {@code false} to skip
      */
     private boolean filterHeader(final int index) {
         if (this.headerName == null) {
             return true;
         }
-
         // non-header elements, including null, will trigger exceptions
         final String name = (this.allHeaders.get(index)).getName();
-
         return this.headerName.equalsIgnoreCase(name);
     }
 
@@ -132,9 +102,8 @@ class BasicListHeaderIterator implements Iterator<Header> {
     /**
      * Obtains the next header from this iteration.
      *
-     * @return  the next header in this iteration
-     *
-     * @throws NoSuchElementException   if there are no more headers
+     * @return the next header in this iteration
+     * @throws NoSuchElementException if there are no more headers
      */
     @Override
     public Header next() throws NoSuchElementException {
@@ -143,7 +112,7 @@ class BasicListHeaderIterator implements Iterator<Header> {
             throw new NoSuchElementException("Iteration already finished.");
         }
 
-        this.lastIndex    = current;
+        this.lastIndex = current;
         this.currentIndex = findNext(current);
 
         return this.allHeaders.get(current);

@@ -4,6 +4,8 @@ import java.util.Set;
 
 /**
  * Details of an entity transmitted by a message.
+ * <p>
+ * 通过消息传输的实体的详细信息。
  *
  * @since 5.0
  */

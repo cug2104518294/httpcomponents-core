@@ -1,48 +1,17 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.net;
-
-import java.net.URI;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.List;
 
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.apache.hc.core5.http.message.ParserCursor;
 import org.apache.hc.core5.http.message.TokenParser;
 import org.apache.hc.core5.util.Args;
+
+import java.net.URI;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 /**
  * A collection of utilities for encoding URLs.
@@ -56,7 +25,8 @@ public class URLEncodedUtils {
     private static final String NAME_VALUE_SEPARATOR = "=";
     private static final char PATH_SEPARATOR = '/';
 
-    private static final BitSet PATH_SEPARATORS     = new BitSet(256);
+    private static final BitSet PATH_SEPARATORS = new BitSet(256);
+
     static {
         PATH_SEPARATORS.set(PATH_SEPARATOR);
     }
@@ -65,10 +35,9 @@ public class URLEncodedUtils {
      * Returns a list of {@link NameValuePair}s URI query parameters.
      * By convention, {@code '&'} and {@code ';'} are accepted as parameter separators.
      *
-     * @param uri input URI.
+     * @param uri     input URI.
      * @param charset parameter charset.
      * @return list of query parameters.
-     *
      * @since 4.5
      */
     public static List<NameValuePair> parse(final URI uri, final Charset charset) {
@@ -84,10 +53,9 @@ public class URLEncodedUtils {
      * Returns a list of {@link NameValuePair}s URI query parameters.
      * By convention, {@code '&'} and {@code ';'} are accepted as parameter separators.
      *
-     * @param s URI query component.
+     * @param s       URI query component.
      * @param charset charset to use when decoding the parameters.
      * @return list of query parameters.
-     *
      * @since 4.2
      */
     public static List<NameValuePair> parse(final CharSequence s, final Charset charset) {
@@ -100,11 +68,10 @@ public class URLEncodedUtils {
     /**
      * Returns a list of {@link NameValuePair}s parameters.
      *
-     * @param s input text.
-     * @param charset parameter charset.
+     * @param s          input text.
+     * @param charset    parameter charset.
      * @param separators parameter separators.
      * @return list of query parameters.
-     *
      * @since 4.4
      */
     public static List<NameValuePair> parse(
@@ -112,7 +79,7 @@ public class URLEncodedUtils {
         Args.notNull(s, "Char sequence");
         final TokenParser tokenParser = TokenParser.INSTANCE;
         final BitSet delimSet = new BitSet();
-        for (final char separator: separators) {
+        for (final char separator : separators) {
             delimSet.set(separator);
         }
         final ParserCursor cursor = new ParserCursor(0, s.length());
@@ -152,7 +119,7 @@ public class URLEncodedUtils {
         }
         final List<String> list = new ArrayList<>();
         final StringBuilder buf = new StringBuilder();
-        for (;;) {
+        for (; ; ) {
             if (cursor.atEnd()) {
                 list.add(buf.toString());
                 break;
@@ -176,10 +143,9 @@ public class URLEncodedUtils {
     /**
      * Returns a list of URI path segments.
      *
-     * @param s URI path component.
+     * @param s       URI path component.
      * @param charset parameter charset.
      * @return list of segments.
-     *
      * @since 4.5
      */
     public static List<String> parsePathSegments(final CharSequence s, final Charset charset) {
@@ -196,7 +162,6 @@ public class URLEncodedUtils {
      *
      * @param s URI path component.
      * @return list of segments.
-     *
      * @since 4.5
      */
     public static List<String> parsePathSegments(final CharSequence s) {
@@ -214,9 +179,8 @@ public class URLEncodedUtils {
      * Returns a string consisting of joint encoded path segments.
      *
      * @param segments the segments.
-     * @param charset parameter charset.
+     * @param charset  parameter charset.
      * @return URI path component
-     *
      * @since 4.5
      */
     public static String formatSegments(final Iterable<String> segments, final Charset charset) {
@@ -231,7 +195,6 @@ public class URLEncodedUtils {
      *
      * @param segments the segments.
      * @return URI path component
-     *
      * @since 4.5
      */
     public static String formatSegments(final String... segments) {
@@ -268,11 +231,10 @@ public class URLEncodedUtils {
      * Returns a String that is suitable for use as an {@code application/x-www-form-urlencoded}
      * list of parameters in an HTTP PUT or HTTP POST.
      *
-     * @param parameters  The parameters to include.
+     * @param parameters         The parameters to include.
      * @param parameterSeparator The parameter separator, by convention, {@code '&'} or {@code ';'}.
-     * @param charset The encoding to use.
+     * @param charset            The encoding to use.
      * @return An {@code application/x-www-form-urlencoded} string
-     *
      * @since 4.3
      */
     public static String format(
@@ -289,10 +251,9 @@ public class URLEncodedUtils {
      * Returns a String that is suitable for use as an {@code application/x-www-form-urlencoded}
      * list of parameters in an HTTP PUT or HTTP POST.
      *
-     * @param parameters  The parameters to include.
-     * @param charset The encoding to use.
+     * @param parameters The parameters to include.
+     * @param charset    The encoding to use.
      * @return An {@code application/x-www-form-urlencoded} string
-     *
      * @since 4.2
      */
     public static String format(
@@ -304,42 +265,48 @@ public class URLEncodedUtils {
     /**
      * Unreserved characters, i.e. alphanumeric, plus: {@code _ - ! . ~ ' ( ) *}
      * <p>
-     *  This list is the same as the {@code unreserved} list in
-     *  <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>
+     * This list is the same as the {@code unreserved} list in
+     * <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>
      */
-    private static final BitSet UNRESERVED   = new BitSet(256);
+    private static final BitSet UNRESERVED = new BitSet(256);
     /**
      * Punctuation characters: , ; : $ & + =
      * <p>
      * These are the additional characters allowed by userinfo.
      */
-    private static final BitSet PUNCT        = new BitSet(256);
-    /** Characters which are safe to use in userinfo,
-     * i.e. {@link #UNRESERVED} plus {@link #PUNCT}uation */
-    private static final BitSet USERINFO     = new BitSet(256);
-    /** Characters which are safe to use in a path,
-     * i.e. {@link #UNRESERVED} plus {@link #PUNCT}uation plus / @ */
-    private static final BitSet PATHSAFE     = new BitSet(256);
-    /** Characters which are safe to use in a query or a fragment,
-     * i.e. {@link #RESERVED} plus {@link #UNRESERVED} */
-    private static final BitSet URIC     = new BitSet(256);
+    private static final BitSet PUNCT = new BitSet(256);
+    /**
+     * Characters which are safe to use in userinfo,
+     * i.e. {@link #UNRESERVED} plus {@link #PUNCT}uation
+     */
+    private static final BitSet USERINFO = new BitSet(256);
+    /**
+     * Characters which are safe to use in a path,
+     * i.e. {@link #UNRESERVED} plus {@link #PUNCT}uation plus / @
+     */
+    private static final BitSet PATHSAFE = new BitSet(256);
+    /**
+     * Characters which are safe to use in a query or a fragment,
+     * i.e. {@link #RESERVED} plus {@link #UNRESERVED}
+     */
+    private static final BitSet URIC = new BitSet(256);
 
     /**
      * Reserved characters, i.e. {@code ;/?:@&=+$,[]}
      * <p>
-     *  This list is the same as the {@code reserved} list in
-     *  <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>
-     *  as augmented by
-     *  <a href="http://www.ietf.org/rfc/rfc2732.txt">RFC 2732</a>
+     * This list is the same as the {@code reserved} list in
+     * <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>
+     * as augmented by
+     * <a href="http://www.ietf.org/rfc/rfc2732.txt">RFC 2732</a>
      */
-    private static final BitSet RESERVED     = new BitSet(256);
+    private static final BitSet RESERVED = new BitSet(256);
 
 
     /**
      * Safe characters for x-www-form-urlencoded data, as per java.net.URLEncoder and browser behaviour,
      * i.e. alphanumeric plus {@code "-", "_", ".", "*"}
      */
-    private static final BitSet URLENCODER   = new BitSet(256);
+    private static final BitSet URLENCODER = new BitSet(256);
 
     private static final BitSet PATH_SPECIAL = new BitSet(256);
 

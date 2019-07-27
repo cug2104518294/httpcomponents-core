@@ -32,6 +32,7 @@ import java.io.IOException;
  */
 @Contract(threading = ThreadingBehavior.IMMUTABLE)
 public class HttpRequestExecutor {
+
     public static final int DEFAULT_WAIT_FOR_CONTINUE = 3000;
     private final int waitForContinue;
     private final ConnectionReuseStrategy connReuseStrategy;

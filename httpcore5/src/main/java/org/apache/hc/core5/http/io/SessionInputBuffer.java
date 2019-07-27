@@ -1,42 +1,17 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.http.io;
+
+import org.apache.hc.core5.util.CharArrayBuffer;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.apache.hc.core5.util.CharArrayBuffer;
 
 /**
  * Session input buffer for HTTP/1.1 blocking connections.
  * <p>
  * This interface facilitates intermediate buffering of input data streamed from
  * an input stream and provides methods for reading lines of text.
+ * <p>
+ * 该接口有助于对从输入流流传输的输入数据进行中间缓冲，并提供读取文本行的方法。
  *
  * @since 4.0
  */
@@ -77,15 +52,15 @@ public interface SessionInputBuffer {
      * {@code b}, then an {@code IndexOutOfBoundsException} is
      * thrown.
      *
-     * @param      b     the buffer into which the data is read.
-     * @param      off   the start offset in array {@code b}
-     *                   at which the data is written.
-     * @param      len   the maximum number of bytes to read.
-     * @param      inputStream Input stream
-     * @return     the total number of bytes read into the buffer, or
-     *             {@code -1} if there is no more data because the end of
-     *             the stream has been reached.
-     * @throws  IOException  if an I/O error occurs.
+     * @param b           the buffer into which the data is read.
+     * @param off         the start offset in array {@code b}
+     *                    at which the data is written.
+     * @param len         the maximum number of bytes to read.
+     * @param inputStream Input stream
+     * @return the total number of bytes read into the buffer, or
+     * {@code -1} if there is no more data because the end of
+     * the stream has been reached.
+     * @throws IOException if an I/O error occurs.
      */
     int read(byte[] b, int off, int len, InputStream inputStream) throws IOException;
 
@@ -95,12 +70,12 @@ public interface SessionInputBuffer {
      * returned as an integer.  This method blocks until input data is
      * available, end of file is detected, or an exception is thrown.
      *
-     * @param      b   the buffer into which the data is read.
-     * @param      inputStream Input stream
-     * @return     the total number of bytes read into the buffer, or
-     *             {@code -1} is there is no more data because the end of
-     *             the stream has been reached.
-     * @throws  IOException  if an I/O error occurs.
+     * @param b           the buffer into which the data is read.
+     * @param inputStream Input stream
+     * @return the total number of bytes read into the buffer, or
+     * {@code -1} is there is no more data because the end of
+     * the stream has been reached.
+     * @throws IOException if an I/O error occurs.
      */
     int read(byte[] b, InputStream inputStream) throws IOException;
 
@@ -112,10 +87,10 @@ public interface SessionInputBuffer {
      * blocks until input data is available, the end of the stream is detected,
      * or an exception is thrown.
      *
-     * @param      inputStream Input stream
-     * @return     the next byte of data, or {@code -1} if the end of the
-     *             stream is reached.
-     * @throws  IOException  if an I/O error occurs.
+     * @param inputStream Input stream
+     * @return the next byte of data, or {@code -1} if the end of the
+     * stream is reached.
+     * @throws IOException if an I/O error occurs.
      */
     int read(InputStream inputStream) throws IOException;
 
@@ -130,12 +105,12 @@ public interface SessionInputBuffer {
      * The choice of a char encoding and line delimiter sequence is up to the
      * specific implementations of this interface.
      *
-     * @param      buffer   the line buffer, one line of characters upon return
-     * @param      inputStream Input stream
-     * @return     the total number of bytes read into the buffer, or
-     *             {@code -1} is there is no more data because the end of
-     *             the stream has been reached.
-     * @throws  IOException  if an I/O error occurs.
+     * @param buffer      the line buffer, one line of characters upon return
+     * @param inputStream Input stream
+     * @return the total number of bytes read into the buffer, or
+     * {@code -1} is there is no more data because the end of
+     * the stream has been reached.
+     * @throws IOException if an I/O error occurs.
      */
     int readLine(CharArrayBuffer buffer, InputStream inputStream) throws IOException;
 

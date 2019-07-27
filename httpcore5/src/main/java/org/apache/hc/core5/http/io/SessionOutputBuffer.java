@@ -1,39 +1,14 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.http.io;
+
+import org.apache.hc.core5.util.CharArrayBuffer;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.hc.core5.util.CharArrayBuffer;
-
 /**
  * Session output buffer for blocking HTTP/1.1 connections.
+ * <p>
+ * 用于HTTP / 1.1连接的会话输出缓冲区。
  * <p>
  * This interface facilitates intermediate buffering of output data streamed out
  * to an output stream and provides provides methods for writing lines of text.
@@ -71,10 +46,10 @@ public interface SessionOutputBuffer {
      * {@code off+len} is greater than the length of the array
      * {@code b}, then an {@code IndexOutOfBoundsException} is thrown.
      *
-     * @param      b     the data.
-     * @param      off   the start offset in the data.
-     * @param      len   the number of bytes to write.
-     * @throws  IOException  if an I/O error occurs.
+     * @param b   the data.
+     * @param off the start offset in the data.
+     * @param len the number of bytes to write.
+     * @throws IOException if an I/O error occurs.
      */
     void write(byte[] b, int off, int len, OutputStream outputStream) throws IOException;
 
@@ -82,16 +57,16 @@ public interface SessionOutputBuffer {
      * Writes {@code b.length} bytes from the specified byte array
      * to this session buffer.
      *
-     * @param      b   the data.
-     * @throws  IOException  if an I/O error occurs.
+     * @param b the data.
+     * @throws IOException if an I/O error occurs.
      */
     void write(byte[] b, OutputStream outputStream) throws IOException;
 
     /**
      * Writes the specified byte to this session buffer.
      *
-     * @param      b   the {@code byte}.
-     * @throws  IOException  if an I/O error occurs.
+     * @param b the {@code byte}.
+     * @throws IOException if an I/O error occurs.
      */
     void write(int b, OutputStream outputStream) throws IOException;
 
@@ -102,8 +77,8 @@ public interface SessionOutputBuffer {
      * The choice of a char encoding and line delimiter sequence is up to the
      * specific implementations of this interface.
      *
-     * @param      buffer   the buffer containing chars of the line.
-     * @throws  IOException  if an I/O error occurs.
+     * @param buffer the buffer containing chars of the line.
+     * @throws IOException if an I/O error occurs.
      */
     void writeLine(CharArrayBuffer buffer, OutputStream outputStream) throws IOException;
 
@@ -115,7 +90,7 @@ public interface SessionOutputBuffer {
      * stream, such bytes should immediately be written to their
      * intended destination.
      *
-     * @throws  IOException  if an I/O error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     void flush(OutputStream outputStream) throws IOException;
 

@@ -18,6 +18,8 @@ import java.util.Locale;
 /**
  * Component that holds all details needed to describe an HTTP connection
  * to a host. This includes remote host name, port and protocol scheme.
+ * <p>
+ * 包含描述与主机的HTTP连接所需的所有详细信息的组件。 这包括远程主机名，端口和协议方案。
  *
  * @see org.apache.hc.core5.net.Host
  * @since 4.0

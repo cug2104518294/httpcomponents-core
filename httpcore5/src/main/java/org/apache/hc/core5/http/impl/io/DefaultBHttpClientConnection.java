@@ -1,31 +1,10 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
-
 package org.apache.hc.core5.http.impl.io;
+
+import org.apache.hc.core5.http.*;
+import org.apache.hc.core5.http.config.Http1Config;
+import org.apache.hc.core5.http.impl.DefaultContentLengthStrategy;
+import org.apache.hc.core5.http.io.*;
+import org.apache.hc.core5.util.Args;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -33,34 +12,16 @@ import java.net.Socket;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 
-import org.apache.hc.core5.http.ClassicHttpRequest;
-import org.apache.hc.core5.http.ClassicHttpResponse;
-import org.apache.hc.core5.http.ContentLengthStrategy;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.HttpException;
-import org.apache.hc.core5.http.HttpStatus;
-import org.apache.hc.core5.http.HttpVersion;
-import org.apache.hc.core5.http.LengthRequiredException;
-import org.apache.hc.core5.http.ProtocolException;
-import org.apache.hc.core5.http.ProtocolVersion;
-import org.apache.hc.core5.http.UnsupportedHttpVersionException;
-import org.apache.hc.core5.http.config.Http1Config;
-import org.apache.hc.core5.http.impl.DefaultContentLengthStrategy;
-import org.apache.hc.core5.http.io.HttpClientConnection;
-import org.apache.hc.core5.http.io.HttpMessageParser;
-import org.apache.hc.core5.http.io.HttpMessageParserFactory;
-import org.apache.hc.core5.http.io.HttpMessageWriter;
-import org.apache.hc.core5.http.io.HttpMessageWriterFactory;
-import org.apache.hc.core5.util.Args;
-
 /**
  * Default implementation of {@link HttpClientConnection}.
  *
  * @since 4.3
  */
 public class DefaultBHttpClientConnection extends BHttpConnectionBase
-                                                   implements HttpClientConnection {
+        implements HttpClientConnection {
 
+    //http协议最后都是要通过对应的socket接口 将对应的数据先放在charArray中 然后写入到输入输出流中
+    //通过底层的tcp和udp进行通信  最后才是去完成对应的请求
     private final HttpMessageParser<ClassicHttpResponse> responseParser;
     private final HttpMessageWriter<ClassicHttpRequest> requestWriter;
     private final ContentLengthStrategy incomingContentStrategy;
@@ -70,20 +31,20 @@ public class DefaultBHttpClientConnection extends BHttpConnectionBase
     /**
      * Creates new instance of DefaultBHttpClientConnection.
      *
-     * @param http1Config Message http1Config. If {@code null}
-     *   {@link Http1Config#DEFAULT} will be used.
-     * @param charDecoder decoder to be used for decoding HTTP protocol elements.
-     *   If {@code null} simple type cast will be used for byte to char conversion.
-     * @param charEncoder encoder to be used for encoding HTTP protocol elements.
-     *   If {@code null} simple type cast will be used for char to byte conversion.
+     * @param http1Config             Message http1Config. If {@code null}
+     *                                {@link Http1Config#DEFAULT} will be used.
+     * @param charDecoder             decoder to be used for decoding HTTP protocol elements.
+     *                                If {@code null} simple type cast will be used for byte to char conversion.
+     * @param charEncoder             encoder to be used for encoding HTTP protocol elements.
+     *                                If {@code null} simple type cast will be used for char to byte conversion.
      * @param incomingContentStrategy incoming content length strategy. If {@code null}
-     *   {@link DefaultContentLengthStrategy#INSTANCE} will be used.
+     *                                {@link DefaultContentLengthStrategy#INSTANCE} will be used.
      * @param outgoingContentStrategy outgoing content length strategy. If {@code null}
-     *   {@link DefaultContentLengthStrategy#INSTANCE} will be used.
-     * @param requestWriterFactory request writer factory. If {@code null}
-     *   {@link DefaultHttpRequestWriterFactory#INSTANCE} will be used.
-     * @param responseParserFactory response parser factory. If {@code null}
-     *   {@link DefaultHttpResponseParserFactory#INSTANCE} will be used.
+     *                                {@link DefaultContentLengthStrategy#INSTANCE} will be used.
+     * @param requestWriterFactory    request writer factory. If {@code null}
+     *                                {@link DefaultHttpRequestWriterFactory#INSTANCE} will be used.
+     * @param responseParserFactory   response parser factory. If {@code null}
+     *                                {@link DefaultHttpResponseParserFactory#INSTANCE} will be used.
      */
     public DefaultBHttpClientConnection(
             final Http1Config http1Config,
@@ -95,9 +56,9 @@ public class DefaultBHttpClientConnection extends BHttpConnectionBase
             final HttpMessageParserFactory<ClassicHttpResponse> responseParserFactory) {
         super(http1Config, charDecoder, charEncoder);
         this.requestWriter = (requestWriterFactory != null ? requestWriterFactory :
-            DefaultHttpRequestWriterFactory.INSTANCE).create();
+                DefaultHttpRequestWriterFactory.INSTANCE).create();
         this.responseParser = (responseParserFactory != null ? responseParserFactory :
-            DefaultHttpResponseParserFactory.INSTANCE).create(http1Config);
+                DefaultHttpResponseParserFactory.INSTANCE).create(http1Config);
         this.incomingContentStrategy = incomingContentStrategy != null ? incomingContentStrategy :
                 DefaultContentLengthStrategy.INSTANCE;
         this.outgoingContentStrategy = outgoingContentStrategy != null ? outgoingContentStrategy :
@@ -202,7 +163,7 @@ public class DefaultBHttpClientConnection extends BHttpConnectionBase
     }
 
     @Override
-    public void receiveResponseEntity( final ClassicHttpResponse response) throws HttpException, IOException {
+    public void receiveResponseEntity(final ClassicHttpResponse response) throws HttpException, IOException {
         Args.notNull(response, "HTTP response");
         final SocketHolder socketHolder = ensureOpen();
         final long len = this.incomingContentStrategy.determineLength(response);

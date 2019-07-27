@@ -6,6 +6,8 @@ import org.apache.hc.core5.annotation.ThreadingBehavior;
 /**
  * Represents a strategy to determine length of the enclosed content entity
  * based on properties of the HTTP message.
+ * <p>
+ * 表示基于HTTP消息的属性确定所包含的内容实体的长度的策略。
  *
  * @since 4.0
  */
@@ -31,7 +33,6 @@ public interface ContentLengthStrategy {
      *
      * @param message HTTP message
      * @return content length, {@link #UNDEFINED}, or {@link #CHUNKED}
-     *
      * @throws HttpException in case of HTTP protocol violation
      */
     long determineLength(HttpMessage message) throws HttpException;

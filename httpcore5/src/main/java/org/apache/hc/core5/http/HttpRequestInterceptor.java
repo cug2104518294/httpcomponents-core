@@ -21,6 +21,9 @@ import java.io.IOException;
  * servlets, protocol interceptors should not use instance variables unless
  * access to those variables is synchronized.
  *
+ *
+ * 请求拦截器
+ *
  * @since 4.0
  */
 @Contract(threading = ThreadingBehavior.STATELESS)
