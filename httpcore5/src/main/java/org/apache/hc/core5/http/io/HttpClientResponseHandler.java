@@ -8,6 +8,10 @@ import java.io.IOException;
 /**
  * Handler that encapsulates the process of generating a response object
  * from a {@link ClassicHttpResponse}.
+ * <p>
+ * 处理程序，它封装了从{@link ClassicHttpResponse}生成响应对象的过程。
+ *
+ * 具体将response的结果封装的 是由对应client处理的 因此对应的实现类都是放在client包中
  *
  * @since 4.0
  */

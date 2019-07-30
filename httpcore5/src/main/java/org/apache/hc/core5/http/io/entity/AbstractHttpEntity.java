@@ -18,6 +18,8 @@ import java.util.Set;
  * Provides the commonly used attributes for streamed and
  * self-contained implementations.
  *
+ * 重点就是writeTo方法 将对应的entity实体转成stream
+ *
  * @since 4.0
  */
 public abstract class AbstractHttpEntity implements HttpEntity {

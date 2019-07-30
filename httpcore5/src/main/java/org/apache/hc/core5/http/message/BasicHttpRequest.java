@@ -11,6 +11,8 @@ import java.net.URISyntaxException;
 /**
  * Basic implementation of {@link HttpRequest}.
  *
+ * 权限校验版本的httprequest
+ *
  * @since 4.0
  */
 public class BasicHttpRequest extends HeaderGroup implements HttpRequest {

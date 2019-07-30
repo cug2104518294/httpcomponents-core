@@ -37,6 +37,8 @@ import java.util.List;
  * repeatable (without a huge effort) as self-contained.
  * </p>
  *
+ * 其实就是http的一些属性信息 以及将对应的信息转成stream流 通过底层tcp进行传输
+ *
  * @since 4.0
  */
 public interface HttpEntity extends EntityDetails, Closeable {

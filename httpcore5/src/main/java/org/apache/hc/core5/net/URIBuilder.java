@@ -1,30 +1,9 @@
-/*
- * ====================================================================
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- * ====================================================================
- *
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- */
 package org.apache.hc.core5.net;
+
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.util.TextUtils;
 
 import java.net.InetAddress;
 import java.net.URI;
@@ -32,16 +11,7 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.hc.core5.http.HttpHost;
-import org.apache.hc.core5.http.NameValuePair;
-import org.apache.hc.core5.http.message.BasicNameValuePair;
-import org.apache.hc.core5.util.TextUtils;
+import java.util.*;
 
 /**
  * Builder for {@link URI} instances.
@@ -104,6 +74,7 @@ public class URIBuilder {
 
     /**
      * Construct an instance from the provided URI.
+     *
      * @param uri
      */
     public URIBuilder(final URI uri) {
@@ -120,14 +91,14 @@ public class URIBuilder {
         return charset;
     }
 
-    private List <NameValuePair> parseQuery(final String query, final Charset charset) {
+    private List<NameValuePair> parseQuery(final String query, final Charset charset) {
         if (query != null && !query.isEmpty()) {
             return URLEncodedUtils.parse(query, charset);
         }
         return null;
     }
 
-    private List <String> parsePath(final String path, final Charset charset) {
+    private List<String> parsePath(final String path, final Charset charset) {
         if (path != null && !path.isEmpty()) {
             return URLEncodedUtils.parsePathSegments(path, charset);
         }
@@ -299,7 +270,7 @@ public class URIBuilder {
      * @param httpHost the scheme, host name, and port.
      * @return this.
      */
-    public URIBuilder setHttpHost(final HttpHost httpHost ) {
+    public URIBuilder setHttpHost(final HttpHost httpHost) {
         setScheme(httpHost.getSchemeName());
         setHost(httpHost.getHostName());
         setPort(httpHost.getPort());
@@ -374,7 +345,7 @@ public class URIBuilder {
      *
      * @return this.
      */
-    public URIBuilder setParameters(final List <NameValuePair> nvps) {
+    public URIBuilder setParameters(final List<NameValuePair> nvps) {
         if (this.queryParams == null) {
             this.queryParams = new ArrayList<>();
         } else {
@@ -397,7 +368,7 @@ public class URIBuilder {
      *
      * @return this.
      */
-    public URIBuilder addParameters(final List <NameValuePair> nvps) {
+    public URIBuilder addParameters(final List<NameValuePair> nvps) {
         if (this.queryParams == null) {
             this.queryParams = new ArrayList<>();
         }
@@ -424,7 +395,7 @@ public class URIBuilder {
         } else {
             this.queryParams.clear();
         }
-        for (final NameValuePair nvp: nvps) {
+        for (final NameValuePair nvp : nvps) {
             this.queryParams.add(nvp);
         }
         this.encodedQuery = null;

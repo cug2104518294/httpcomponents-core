@@ -33,7 +33,7 @@ public interface MessageHeaders {
      *
      * @param name the name of the header to return.
      * @return the first header whose name property equals {@code name}
-     *   or {@code null} if no such header could be found.
+     * or {@code null} if no such header could be found.
      */
     Header getFirstHeader(String name);
 
@@ -74,7 +74,7 @@ public interface MessageHeaders {
      *
      * @param name the name of the header to return.
      * @return the last header whose name property equals {@code name}.
-     *   or {@code null} if no such header could be found.
+     * or {@code null} if no such header could be found.
      */
     Header getLastHeader(String name);
 
@@ -82,18 +82,17 @@ public interface MessageHeaders {
      * Returns an iterator of all the headers.
      *
      * @return Iterator that returns Header objects in the sequence they are
-     *         sent over a connection.
+     * sent over a connection.
      */
     Iterator<Header> headerIterator();
 
     /**
      * Returns an iterator of the headers with a given name.
      *
-     * @param name      the name of the headers over which to iterate, or
-     *                  {@code null} for all headers
-     *
+     * @param name the name of the headers over which to iterate, or
+     *             {@code null} for all headers
      * @return Iterator that returns Header objects with the argument name
-     *         in the sequence they are sent over a connection.
+     * in the sequence they are sent over a connection.
      */
     Iterator<Header> headerIterator(String name);
 

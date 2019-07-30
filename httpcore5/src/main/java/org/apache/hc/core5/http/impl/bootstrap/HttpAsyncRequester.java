@@ -27,36 +27,15 @@
 
 package org.apache.hc.core5.http.impl.bootstrap;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.apache.hc.core5.annotation.Internal;
 import org.apache.hc.core5.concurrent.BasicFuture;
 import org.apache.hc.core5.concurrent.ComplexFuture;
 import org.apache.hc.core5.concurrent.FutureCallback;
 import org.apache.hc.core5.function.Callback;
 import org.apache.hc.core5.function.Decorator;
-import org.apache.hc.core5.http.EntityDetails;
-import org.apache.hc.core5.http.Header;
-import org.apache.hc.core5.http.HttpException;
-import org.apache.hc.core5.http.HttpHost;
-import org.apache.hc.core5.http.HttpRequest;
-import org.apache.hc.core5.http.HttpResponse;
-import org.apache.hc.core5.http.ProtocolException;
+import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.impl.DefaultAddressResolver;
-import org.apache.hc.core5.http.nio.AsyncClientEndpoint;
-import org.apache.hc.core5.http.nio.AsyncClientExchangeHandler;
-import org.apache.hc.core5.http.nio.AsyncPushConsumer;
-import org.apache.hc.core5.http.nio.AsyncRequestProducer;
-import org.apache.hc.core5.http.nio.AsyncResponseConsumer;
-import org.apache.hc.core5.http.nio.CapacityChannel;
-import org.apache.hc.core5.http.nio.DataStreamChannel;
-import org.apache.hc.core5.http.nio.HandlerFactory;
-import org.apache.hc.core5.http.nio.RequestChannel;
+import org.apache.hc.core5.http.nio.*;
 import org.apache.hc.core5.http.nio.command.RequestExecutionCommand;
 import org.apache.hc.core5.http.nio.command.ShutdownCommand;
 import org.apache.hc.core5.http.nio.support.BasicClientExchangeHandler;
@@ -68,15 +47,17 @@ import org.apache.hc.core5.pool.ConnPoolControl;
 import org.apache.hc.core5.pool.ManagedConnPool;
 import org.apache.hc.core5.pool.PoolEntry;
 import org.apache.hc.core5.pool.PoolStats;
-import org.apache.hc.core5.reactor.Command;
-import org.apache.hc.core5.reactor.IOEventHandlerFactory;
-import org.apache.hc.core5.reactor.IOReactorConfig;
-import org.apache.hc.core5.reactor.IOSession;
-import org.apache.hc.core5.reactor.IOSessionListener;
-import org.apache.hc.core5.reactor.ProtocolIOSession;
+import org.apache.hc.core5.reactor.*;
 import org.apache.hc.core5.util.Args;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * HTTP/1.1 client side message exchange initiator.
@@ -99,7 +80,7 @@ public class HttpAsyncRequester extends AsyncRequester implements ConnPoolContro
             final IOSessionListener sessionListener,
             final ManagedConnPool<HttpHost, IOSession> connPool) {
         super(eventHandlerFactory, ioReactorConfig, ioSessionDecorator, exceptionCallback, sessionListener,
-                        ShutdownCommand.GRACEFUL_IMMEDIATE_CALLBACK, DefaultAddressResolver.INSTANCE);
+                ShutdownCommand.GRACEFUL_IMMEDIATE_CALLBACK, DefaultAddressResolver.INSTANCE);
         this.connPool = Args.notNull(connPool, "Connection pool");
     }
 
@@ -177,59 +158,59 @@ public class HttpAsyncRequester extends AsyncRequester implements ConnPoolContro
         final Future<PoolEntry<HttpHost, IOSession>> leaseFuture = connPool.lease(
                 host, null, timeout, new FutureCallback<PoolEntry<HttpHost, IOSession>>() {
 
-            @Override
-            public void completed(final PoolEntry<HttpHost, IOSession> poolEntry) {
-                final AsyncClientEndpoint endpoint = new InternalAsyncClientEndpoint(poolEntry);
-                final IOSession ioSession = poolEntry.getConnection();
-                if (ioSession != null && ioSession.isClosed()) {
-                    poolEntry.discardConnection(CloseMode.IMMEDIATE);
-                }
-                if (poolEntry.hasConnection()) {
-                    resultFuture.completed(endpoint);
-                } else {
-                    final Future<IOSession> futute = requestSession(host, timeout, attachment, new FutureCallback<IOSession>() {
-
-                        @Override
-                        public void completed(final IOSession session) {
-                            session.setSocketTimeout(timeout);
-                            poolEntry.assignConnection(session);
+                    @Override
+                    public void completed(final PoolEntry<HttpHost, IOSession> poolEntry) {
+                        final AsyncClientEndpoint endpoint = new InternalAsyncClientEndpoint(poolEntry);
+                        final IOSession ioSession = poolEntry.getConnection();
+                        if (ioSession != null && ioSession.isClosed()) {
+                            poolEntry.discardConnection(CloseMode.IMMEDIATE);
+                        }
+                        if (poolEntry.hasConnection()) {
                             resultFuture.completed(endpoint);
+                        } else {
+                            final Future<IOSession> futute = requestSession(host, timeout, attachment, new FutureCallback<IOSession>() {
+
+                                @Override
+                                public void completed(final IOSession session) {
+                                    session.setSocketTimeout(timeout);
+                                    poolEntry.assignConnection(session);
+                                    resultFuture.completed(endpoint);
+                                }
+
+                                @Override
+                                public void failed(final Exception cause) {
+                                    try {
+                                        resultFuture.failed(cause);
+                                    } finally {
+                                        endpoint.releaseAndDiscard();
+                                    }
+                                }
+
+                                @Override
+                                public void cancelled() {
+                                    try {
+                                        resultFuture.cancel();
+                                    } finally {
+                                        endpoint.releaseAndDiscard();
+                                    }
+                                }
+
+                            });
+                            resultFuture.setDependency(futute);
                         }
+                    }
 
-                        @Override
-                        public void failed(final Exception cause) {
-                            try {
-                                resultFuture.failed(cause);
-                            } finally {
-                                endpoint.releaseAndDiscard();
-                            }
-                        }
+                    @Override
+                    public void failed(final Exception ex) {
+                        resultFuture.failed(ex);
+                    }
 
-                        @Override
-                        public void cancelled() {
-                            try {
-                                resultFuture.cancel();
-                            } finally {
-                                endpoint.releaseAndDiscard();
-                            }
-                        }
+                    @Override
+                    public void cancelled() {
+                        resultFuture.cancel();
+                    }
 
-                    });
-                    resultFuture.setDependency(futute);
-                }
-            }
-
-            @Override
-            public void failed(final Exception ex) {
-                resultFuture.failed(ex);
-            }
-
-            @Override
-            public void cancelled() {
-                resultFuture.cancel();
-            }
-
-        });
+                });
         resultFuture.setDependency(leaseFuture);
         return resultFuture;
     }
